@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baby Rattle Sounds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#fff6e9; --bg2:#eaf6ff; --card:#ffffff; --ink:#5b4636; --ink-dim:#9a8b7c;
+  --line:#f0e4d3; --accent:#ff9ecb; --accent2:#8ecdf0; --shadow:0 10px 24px rgba(120,90,60,.14);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg1:#241a2e; --bg2:#1c2430; --card:#2c2438; --ink:#f3e9dd; --ink-dim:#b6a89a;
+    --line:#3c3348; --accent:#ff9ecb; --accent2:#8ecdf0; --shadow:0 10px 26px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg1:#241a2e; --bg2:#1c2430; --card:#2c2438; --ink:#f3e9dd; --ink-dim:#b6a89a;
+  --line:#3c3348; --accent:#ff9ecb; --accent2:#8ecdf0; --shadow:0 10px 26px rgba(0,0,0,.4);
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;min-height:100%;
+  background:
+    radial-gradient(60% 50% at 12% 8%, color-mix(in srgb,var(--accent2) 35%,transparent) 0%, transparent 60%),
+    radial-gradient(60% 50% at 88% 92%, color-mix(in srgb,var(--accent) 30%,transparent) 0%, transparent 60%),
+    linear-gradient(180deg,var(--bg1),var(--bg2));
+  background-attachment:fixed;
+  color:var(--ink);font-family:"Nunito",system-ui,sans-serif;
+  -webkit-tap-highlight-color:transparent;
+}
+.wrap{max-width:640px;margin:0 auto;padding:22px 18px 34px}
+header{text-align:center;margin-bottom:18px}
+h1{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(26px,7vw,34px);margin:4px 0 4px;color:var(--ink)}
+.sub{margin:0;color:var(--ink-dim);font-size:15px}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:20px}
+.grid[hidden]{display:none}
+@media (min-width:480px){ .grid{grid-template-columns:repeat(3,1fr);} }
+
+.rattle{
+  background:var(--card);border:1px solid var(--line);border-radius:22px;
+  padding:16px 10px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;box-shadow:var(--shadow);border:0;font-family:inherit;color:inherit;
+  transition:transform .15s;
+}
+.rattle:active{transform:scale(.95)}
+.rattle:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+.rattle svg{width:78px;height:78px;display:block;transform-origin:50% 15%;}
+.rattle.playing svg{animation:shake .32s ease-in-out infinite}
+@keyframes shake{
+  0%{transform:rotate(0deg)}
+  25%{transform:rotate(-16deg)}
+  50%{transform:rotate(0deg)}
+  75%{transform:rotate(16deg)}
+  100%{transform:rotate(0deg)}
+}
+.rattle .name{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:14.5px}
+.rattle .ring{position:relative;width:40px;height:5px}
+.rattle .ring i{position:absolute;inset:0;border-radius:6px;background:var(--line);overflow:hidden}
+.rattle .ring b{position:absolute;left:0;top:0;bottom:0;width:0%;background:var(--accent);border-radius:6px;transition:width .05s linear}
+
+.hint{margin-top:26px;text-align:center;color:var(--ink-dim);font-size:13px}
+.hint kbd{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-family:inherit}
+
+.tabs{display:flex;gap:8px;justify-content:center;margin-top:6px}
+.tab{
+  font-family:"Baloo 2",sans-serif;font-weight:700;font-size:15px;
+  background:var(--card);color:var(--ink-dim);border:1px solid var(--line);
+  border-radius:999px;padding:9px 20px;cursor:pointer;transition:background .15s,color .15s;
+}
+.tab[aria-selected="true"]{background:var(--accent);color:#4a1f36;border-color:transparent}
+.tab:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+
+.rattle{position:relative}
+.del{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--line);color:var(--ink-dim);display:flex;align-items:center;justify-content:center;
+  font-size:15px;line-height:1;cursor:pointer;flex-shrink:0;
+}
+.del:hover{background:#ffb4b4;color:#7a1f1f}
+.rattle .del{position:absolute;top:6px;right:6px;width:22px;height:22px}
+.rattle .emoji{font-size:44px;line-height:1;height:78px;display:flex;align-items:center;justify-content:center;
+  width:78px;border-radius:50%;background:var(--emoji-bg,var(--line));transform-origin:50% 15%;}
+.rattle.playing .emoji{animation:shake .32s ease-in-out infinite}
+
+.addPanel{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:22px;
+  padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.addPanel[hidden]{display:none}
+.addPanel label{display:flex;flex-direction:column;gap:5px;font-weight:600;font-size:13.5px;color:var(--ink-dim)}
+.addPanel input[type="text"],.addPanel select{
+  font:inherit;font-size:15px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);
+  background:transparent;color:var(--ink)
+}
+.addPanel input[type="file"]{font:inherit;font-size:13.5px;color:var(--ink)}
+.addPanel .ring{align-self:flex-start;padding:12px 26px}
+.addStatus{margin:0;font-size:14px;font-weight:700;color:var(--ink-dim);min-height:18px}
+.addStatus.warn{color:#c25a2b}
+.addStatus.ok{color:#2b9a5b}
+.customList{margin-top:6px;display:flex;flex-direction:column;gap:8px}
+.customList .row{
+  display:flex;align-items:center;gap:10px;background:transparent;border:1px solid var(--line);
+  border-radius:14px;padding:8px 10px;font-size:14px
+}
+.customList .row .emo{font-size:20px}
+.customList .row .meta{flex:1;color:var(--ink-dim)}
+.customList .row .meta b{color:var(--ink);font-weight:700}
+.customList .row .del{position:static;width:24px;height:24px}
+.customList h3{margin:2px 0 0;font-family:"Baloo 2",sans-serif;font-size:15px;color:var(--ink)}
+
+@media (prefers-reduced-motion:reduce){ .rattle.playing svg,.rattle.playing .emoji{animation:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Baby Rattle Sounds 🍼</h1>
+    <p class="sub">Tap a toy to hear its sound</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Sound category">
+    <button class="tab" id="tabRattle" role="tab" aria-selected="true">🎵 Rattles</button>
+    <button class="tab" id="tabAnimal" role="tab" aria-selected="false">🐾 Animals</button>
+    <button class="tab" id="tabAdd" role="tab" aria-selected="false">➕ Add</button>
+  </div>
+
+  <div class="grid" id="gridRattle"></div>
+  <div class="grid" id="gridAnimal" hidden></div>
+
+  <div class="addPanel" id="addPanel" hidden>
+    <label>Sound name
+      <input type="text" id="newName" placeholder="e.g. Cat Meow" maxlength="24">
+    </label>
+    <label>Emoji icon
+      <input type="text" id="newEmoji" placeholder="🔊" maxlength="4">
+    </label>
+    <label>Category
+      <select id="newCat">
+        <option value="rattle">Rattle</option>
+        <option value="animal">Animal</option>
+      </select>
+    </label>
+    <label>Audio file
+      <input type="file" id="newFile" accept="audio/*">
+    </label>
+    <button class="ring" id="addBtn" type="button">Add sound</button>
+    <p class="addStatus" id="addStatus" aria-live="polite"></p>
+
+    <button class="toggle" id="restoreBtn" type="button" hidden style="align-self:flex-start;padding:9px 18px">Restore removed toys</button>
+
+    <div id="customListWrap">
+      <h3>Your added sounds</h3>
+      <div class="customList" id="customList"></div>
+    </div>
+  </div>
+
+  <p class="hint" id="hintText">Tap any toy again to hear it once more</p>
+</div>
+
+<script>
+(function(){
+  /* ---------------- toy art + sound definitions ---------------- */
+  var TOYS = [
+    { id:"star",  name:"Star",   c1:"#ffd76b", c2:"#ffb703", sound:"bells",  cat:"rattle" },
+    { id:"flower",name:"Flower", c1:"#ff9ecb", c2:"#ff6fae", sound:"xylo",   cat:"rattle" },
+    { id:"cloud", name:"Cloud",  c1:"#eaf3ff", c2:"#bcdcff", sound:"rain",   cat:"rattle" },
+    { id:"moon",  name:"Moon",   c1:"#ffe9a6", c2:"#ffd166", sound:"music",  cat:"rattle" },
+    { id:"woodbeads",name:"Wooden Beads", c1:"#f2c96e", c2:"#d9a63c", sound:"wood", cat:"rattle" },
+    { id:"jinglewood",name:"Jingle Wood", c1:"#e8c79a", c2:"#c49a63", sound:"woodjingle", cat:"rattle" },
+    { id:"temple",name:"Temple Bell", c1:"#ffd98a", c2:"#e0a53c", sound:"pujabell", cat:"rattle" },
+
+    { id:"bear",  name:"Bear",   c1:"#d9a66c", c2:"#b9814a", sound:"bearGrowl", cat:"animal" },
+    { id:"ele",   name:"Elephant",c1:"#a6d8ff", c2:"#6fb8f2", sound:"eleTrumpet", cat:"animal" },
+    { id:"rabbit",name:"Rabbit", c1:"#e8c79a", c2:"#c49a63", sound:"rabbitHop", cat:"animal" },
+    { id:"duck",  name:"Duck",   c1:"#f2c96e", c2:"#d9a63c", sound:"duckQuack", cat:"animal" }
+  ];
+
+  function svgFor(t){
+    var body = "";
+    if(t.id==="star"){
+      body = '<path d="M50 14 L58 40 L86 40 L63 56 L71 82 L50 65 L29 82 L37 56 L14 40 L42 40 Z" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3" stroke-linejoin="round"/>' +
+             '<circle cx="41" cy="45" r="3" fill="'+t.c2+'"/><circle cx="59" cy="45" r="3" fill="'+t.c2+'"/><circle cx="50" cy="58" r="3" fill="'+t.c2+'"/>';
+    } else if(t.id==="bear"){
+      body = '<circle cx="30" cy="24" r="10" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<circle cx="70" cy="24" r="10" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<circle cx="50" cy="42" r="30" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<circle cx="38" cy="40" r="3.2" fill="#5b4636"/><circle cx="62" cy="40" r="3.2" fill="#5b4636"/>' +
+             '<ellipse cx="50" cy="50" rx="8" ry="6" fill="#fff3e4"/><circle cx="50" cy="47" r="3" fill="#5b4636"/>';
+    } else if(t.id==="flower"){
+      body = '<g fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="2.5">' +
+             '<circle cx="50" cy="24" r="14"/><circle cx="74" cy="42" r="14"/><circle cx="65" cy="68" r="14"/>' +
+             '<circle cx="35" cy="68" r="14"/><circle cx="26" cy="42" r="14"/></g>' +
+             '<circle cx="50" cy="46" r="15" fill="#ffe08a" stroke="'+t.c2+'" stroke-width="2.5"/>';
+    } else if(t.id==="ele"){
+      body = '<ellipse cx="48" cy="46" rx="30" ry="26" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<ellipse cx="24" cy="40" rx="9" ry="13" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<path d="M70 46 q14 4 10 24" fill="none" stroke="'+t.c2+'" stroke-width="6" stroke-linecap="round"/>' +
+             '<circle cx="40" cy="42" r="3" fill="#4a4a4a"/><circle cx="58" cy="42" r="3" fill="#4a4a4a"/>' +
+             '<ellipse cx="84" cy="30" rx="8" ry="9" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>';
+    } else if(t.id==="cloud"){
+      body = '<g fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3">' +
+             '<circle cx="35" cy="50" r="18"/><circle cx="58" cy="38" r="22"/><circle cx="76" cy="52" r="15"/>' +
+             '<rect x="22" y="50" width="62" height="20" rx="10"/></g>';
+    } else if(t.id==="moon"){
+      body = '<path d="M66 16 a34 34 0 1 0 18 52 a26 26 0 1 1 -18 -52 Z" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3" stroke-linejoin="round"/>' +
+             '<circle cx="50" cy="30" r="2.6" fill="'+t.c2+'"/><circle cx="62" cy="46" r="2" fill="'+t.c2+'"/><circle cx="46" cy="52" r="1.6" fill="'+t.c2+'"/>';
+    } else if(t.id==="rabbit"){
+      body = '<ellipse cx="38" cy="18" rx="7" ry="16" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<ellipse cx="62" cy="18" rx="7" ry="16" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<ellipse cx="38" cy="20" rx="3" ry="10" fill="#ffe3ea"/><ellipse cx="62" cy="20" rx="3" ry="10" fill="#ffe3ea"/>' +
+             '<circle cx="50" cy="48" r="28" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<circle cx="40" cy="46" r="3" fill="#5b4636"/><circle cx="60" cy="46" r="3" fill="#5b4636"/>' +
+             '<ellipse cx="50" cy="56" rx="5" ry="3.5" fill="#c49a63"/>';
+    } else if(t.id==="duck"){
+      body = '<circle cx="46" cy="52" r="26" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<circle cx="68" cy="34" r="15" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<circle cx="73" cy="30" r="2.6" fill="#5b4636"/>' +
+             '<path d="M80 36 q12 2 10 9 q-9 2 -14 -4 Z" fill="#ff9d4d" stroke="#d97b2b" stroke-width="2"/>';
+    } else if(t.id==="temple"){
+      body = '<path d="M50 20 L58 34 L42 34 Z" fill="'+t.c2+'"/>' +
+             '<rect x="46" y="30" width="8" height="18" rx="2" fill="'+t.c2+'"/>' +
+             '<path d="M22 50 Q50 34 78 50 L74 54 Q50 42 26 54 Z" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="2.5"/>' +
+             '<path d="M26 54 L74 54 L82 90 Q50 102 18 90 Z" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3" stroke-linejoin="round"/>' +
+             '<line x1="30" y1="66" x2="70" y2="66" stroke="'+t.c2+'" stroke-width="2"/>' +
+             '<line x1="27" y1="76" x2="73" y2="76" stroke="'+t.c2+'" stroke-width="2"/>';
+    } else if(t.id==="woodbeads"){
+      body = '<g fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="2.5">' +
+             '<circle cx="30" cy="52" r="13"/><circle cx="50" cy="46" r="13"/><circle cx="70" cy="52" r="13"/>' +
+             '<circle cx="40" cy="66" r="13"/><circle cx="60" cy="66" r="13"/></g>';
+    } else if(t.id==="jinglewood"){
+      body = '<rect x="30" y="44" width="40" height="26" rx="6" fill="'+t.c1+'" stroke="'+t.c2+'" stroke-width="3"/>' +
+             '<line x1="30" y1="57" x2="70" y2="57" stroke="'+t.c2+'" stroke-width="2"/>' +
+             '<circle cx="30" cy="30" r="9" fill="#ffd98a" stroke="#e0a53c" stroke-width="2.5"/>' +
+             '<circle cx="70" cy="30" r="9" fill="#ffd98a" stroke="#e0a53c" stroke-width="2.5"/>' +
+             '<circle cx="30" cy="33" r="1.6" fill="#b9812a"/><circle cx="70" cy="33" r="1.6" fill="#b9812a"/>';
+    }
+    return '<svg viewBox="0 0 100 118" xmlns="http://www.w3.org/2000/svg">' +
+      '<line x1="50" y1="82" x2="50" y2="106" stroke="#caa872" stroke-width="7" stroke-linecap="round"/>' +
+      '<circle cx="50" cy="108" r="5" fill="none" stroke="#caa872" stroke-width="4"/>' +
+      body + '</svg>';
+  }
+
+  var gridRattle = document.getElementById("gridRattle");
+  var gridAnimal = document.getElementById("gridAnimal");
+
+  function makeCard(nameText, mediaHTML, onPlay, removable, onRemove){
+    var btn = document.createElement("button");
+    btn.className = "rattle"; btn.type = "button";
+    btn.setAttribute("aria-label","Play "+nameText+" sound");
+    btn.innerHTML = mediaHTML +
+      '<span class="name">'+nameText+'</span>' +
+      '<span class="ring"><i><b></b></i></span>';
+    btn.addEventListener("click", function(e){
+      if(e.target.closest(".del")) return;
+      onPlay(btn);
+    });
+    if(removable){
+      var del = document.createElement("span");
+      del.className = "del"; del.setAttribute("role","button");
+      del.setAttribute("aria-label","Remove "+nameText); del.textContent = "\u00d7";
+      del.addEventListener("click", function(ev){ ev.stopPropagation(); onRemove(); });
+      btn.appendChild(del);
+    }
+    return btn;
+  }
+
+  function loadHidden(){
+    try{ return JSON.parse(localStorage.getItem("hiddenBuiltins") || "[]"); }
+    catch(e){ return []; }
+  }
+  function saveHidden(arr){
+    try{ localStorage.setItem("hiddenBuiltins", JSON.stringify(arr)); }catch(e){}
+  }
+  var hiddenBuiltins = loadHidden();
+  function isHidden(id){ return hiddenBuiltins.indexOf(id) !== -1; }
+  function hideBuiltin(id){
+    if(!isHidden(id)){ hiddenBuiltins.push(id); saveHidden(hiddenBuiltins); }
+    var el = document.querySelector('[data-builtin-id="'+id+'"]');
+    if(el) el.remove();
+    updateRestoreBtn();
+  }
+
+  TOYS.forEach(function(t){
+    if(isHidden(t.id)) return;
+    var btn = makeCard(t.name, svgFor(t), function(b){ playToy(t.id, b); }, true, function(){ hideBuiltin(t.id); });
+    btn.dataset.builtinId = t.id;
+    (t.cat==="animal" ? gridAnimal : gridRattle).appendChild(btn);
+  });
+
+  var tabRattle = document.getElementById("tabRattle"), tabAnimal = document.getElementById("tabAnimal"), tabAdd = document.getElementById("tabAdd");
+  var subEl = document.querySelector(".sub");
+  var addPanel = document.getElementById("addPanel");
+  var hintText = document.getElementById("hintText");
+  function showTab(which){
+    tabRattle.setAttribute("aria-selected", which==="rattle");
+    tabAnimal.setAttribute("aria-selected", which==="animal");
+    tabAdd.setAttribute("aria-selected", which==="add");
+    gridRattle.hidden = which!=="rattle";
+    gridAnimal.hidden = which!=="animal";
+    addPanel.hidden = which!=="add";
+    hintText.hidden = which==="add";
+    subEl.textContent = which==="rattle" ? "Tap a toy to hear it rattle"
+      : which==="animal" ? "Tap an animal to hear its sound"
+      : "Add your own sound with a name, icon and category";
+  }
+  tabRattle.addEventListener("click", function(){ showTab("rattle"); });
+  tabAnimal.addEventListener("click", function(){ showTab("animal"); });
+  tabAdd.addEventListener("click", function(){ showTab("add"); });
+
+  /* ---------------- audio engine ---------------- */
+  var ctx = null;
+  function audio(){
+    if(!ctx){
+      var AC = window.AudioContext || window.webkitAudioContext;
+      ctx = new AC();
+    }
+    if(ctx.state === "suspended") ctx.resume();
+    return ctx;
+  }
+  function noiseBuffer(c, dur){
+    var n = Math.max(1, Math.floor(c.sampleRate*dur));
+    var buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0);
+    for(var i=0;i<n;i++) d[i] = Math.random()*2-1;
+    return buf;
+  }
+  function tone(c, t0, freq, dur, type, gain){
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = type||"sine"; o.frequency.setValueAtTime(freq, t0);
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(gain==null?.5:gain, t0+.008);
+    g.gain.exponentialRampToValueAtTime(.0001, t0+dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(t0); o.stop(t0+dur+.05);
+    return o;
+  }
+  function burst(c, t0, dur, freqLo, freqHi, gain){
+    var src = c.createBufferSource(); src.buffer = noiseBuffer(c, dur);
+    var bp = c.createBiquadFilter(); bp.type="bandpass"; bp.frequency.value=(freqLo+freqHi)/2; bp.Q.value=1.1;
+    var g = c.createGain();
+    g.gain.setValueAtTime(0,t0);
+    g.gain.linearRampToValueAtTime(gain==null?.55:gain, t0+.01);
+    g.gain.exponentialRampToValueAtTime(.0001, t0+dur);
+    src.connect(bp); bp.connect(g); g.connect(c.destination);
+    src.start(t0); src.stop(t0+dur+.05);
+  }
+
+  function soundBells(c, t0){
+    var notes=[1760,1975,2217,2637,2093];
+    for(var i=0;i<9;i++){
+      var f = notes[Math.floor(Math.random()*notes.length)]*(1+(Math.random()*.03-.015));
+      var t = t0 + i*0.075 + Math.random()*0.02;
+      tone(c,t,f,.5,"sine",.16);
+      tone(c,t,f*2.01,.35,"sine",.06);
+    }
+    return 9*0.075+0.5;
+  }
+  function soundSqueak(c,t0){
+    var o=c.createOscillator(), g=c.createGain();
+    o.type="triangle";
+    o.frequency.setValueAtTime(500,t0);
+    o.frequency.exponentialRampToValueAtTime(1100,t0+.11);
+    o.frequency.exponentialRampToValueAtTime(650,t0+.24);
+    g.gain.setValueAtTime(0,t0);
+    g.gain.linearRampToValueAtTime(.35,t0+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,t0+.28);
+    o.connect(g); g.connect(c.destination);
+    o.start(t0); o.stop(t0+.3);
+    return .32;
+  }
+  function soundXylo(c,t0){
+    var scale=[523.25,587.33,659.25,783.99,880];
+    var order=[0,2,1,3,4,2];
+    order.forEach(function(idx,i){
+      var t=t0+i*0.11;
+      tone(c,t,scale[idx],.5,"triangle",.28);
+      tone(c,t,scale[idx]*2,.3,"triangle",.06);
+    });
+    return order.length*0.11+0.5;
+  }
+  function soundShaker(c,t0){
+    var t=t0;
+    for(var i=0;i<7;i++){
+      burst(c,t,.09,1800,4200,.5);
+      t += 0.085 + (i%3===0?0.05:0);
+    }
+    return t-t0+0.15;
+  }
+  function soundRain(c,t0){
+    var src=c.createBufferSource(); src.buffer=noiseBuffer(c,1.1);
+    var bp=c.createBiquadFilter(); bp.type="bandpass"; bp.Q.value=.7;
+    bp.frequency.setValueAtTime(4500,t0);
+    bp.frequency.exponentialRampToValueAtTime(600,t0+1.05);
+    var g=c.createGain();
+    g.gain.setValueAtTime(0,t0);
+    g.gain.linearRampToValueAtTime(.4,t0+.15);
+    g.gain.linearRampToValueAtTime(.25,t0+.7);
+    g.gain.exponentialRampToValueAtTime(.0001,t0+1.1);
+    src.connect(bp); bp.connect(g); g.connect(c.destination);
+    src.start(t0); src.stop(t0+1.15);
+    return 1.15;
+  }
+  function soundMusic(c,t0){
+    var scale=[659.25,739.99,880,987.77,1174.66];
+    var order=[0,1,2,1,3,4];
+    order.forEach(function(idx,i){
+      tone(c,t0+i*0.16,scale[idx],.55,"sine",.22);
+    });
+    return order.length*0.16+0.55;
+  }
+  function soundWoodJingle(c,t0){
+    var t = t0;
+    for(var i=0;i<6;i++){
+      /* woodblock click: short filtered noise pop, pitch varies a touch */
+      var clickDur = .05;
+      var src = c.createBufferSource(); src.buffer = noiseBuffer(c, clickDur);
+      var bp = c.createBiquadFilter(); bp.type="bandpass";
+      bp.frequency.value = 900 + Math.random()*160; bp.Q.value = 2.4;
+      var g = c.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(.6, t+.004);
+      g.gain.exponentialRampToValueAtTime(.0001, t+clickDur);
+      src.connect(bp); bp.connect(g); g.connect(c.destination);
+      src.start(t); src.stop(t+clickDur+.02);
+      /* woody tonal thock under the click */
+      tone(c, t, 240+Math.random()*30, .09, "triangle", .18);
+
+      /* little jingle right after each wood click */
+      var jt = t + 0.03;
+      for(var j=0;j<2;j++){
+        var f = [2093,2349,2637][Math.floor(Math.random()*3)]*(1+(Math.random()*.02-.01));
+        tone(c, jt + j*0.03, f, .28, "sine", .1);
+      }
+      t += 0.17 + (i%3===0? .06:0);
+    }
+    return t-t0+0.3;
+  }
+  function soundWood(c,t0){
+    /* plain wooden beads: dry clacks only, no bells */
+    var t = t0;
+    var hits = 8;
+    for(var i=0;i<hits;i++){
+      var dur = .045;
+      var src = c.createBufferSource(); src.buffer = noiseBuffer(c, dur);
+      var bp = c.createBiquadFilter(); bp.type="bandpass";
+      bp.frequency.value = 700 + Math.random()*350; bp.Q.value = 2.8;
+      var g = c.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(.55 - i*0.01, t+.004);
+      g.gain.exponentialRampToValueAtTime(.0001, t+dur);
+      src.connect(bp); bp.connect(g); g.connect(c.destination);
+      src.start(t); src.stop(t+dur+.02);
+      tone(c, t, 200+Math.random()*60, .07, "triangle", .14);
+      t += 0.09 + (Math.random()*0.05) + (i===3?0.08:0);
+    }
+    return t-t0+0.2;
+  }
+
+  /* ---- real animal-style sounds ---- */
+  function soundDuckQuack(c,t0){
+    function quack(t,dur,f0,f1){
+      var o=c.createOscillator(), g=c.createGain();
+      var bp=c.createBiquadFilter(); bp.type="bandpass"; bp.frequency.value=900; bp.Q.value=1.4;
+      o.type="sawtooth";
+      o.frequency.setValueAtTime(f0,t);
+      o.frequency.exponentialRampToValueAtTime(f1,t+dur*.7);
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(.28,t+.012);
+      g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+      o.connect(bp); bp.connect(g); g.connect(c.destination);
+      o.start(t); o.stop(t+dur+.03);
+    }
+    quack(t0,.16,340,220);
+    quack(t0+.22,.12,320,210);
+    return .4;
+  }
+  function soundBearGrowl(c,t0){
+    var dur = .9;
+    var o1=c.createOscillator(), o2=c.createOscillator(), g=c.createGain();
+    var lp=c.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=420;
+    o1.type="sawtooth"; o1.frequency.setValueAtTime(75,t0); o1.frequency.linearRampToValueAtTime(58,t0+dur);
+    o2.type="sawtooth"; o2.frequency.setValueAtTime(76.5,t0); o2.frequency.linearRampToValueAtTime(59,t0+dur);
+    var lfo=c.createOscillator(), lfoGain=c.createGain();
+    lfo.frequency.value=13; lfoGain.gain.value=140;
+    lfo.connect(lfoGain); lfoGain.connect(lp.frequency);
+    g.gain.setValueAtTime(0,t0);
+    g.gain.linearRampToValueAtTime(.4,t0+.12);
+    g.gain.linearRampToValueAtTime(.28,t0+dur*.6);
+    g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+    o1.connect(lp); o2.connect(lp); lp.connect(g); g.connect(c.destination);
+    o1.start(t0); o2.start(t0); lfo.start(t0);
+    o1.stop(t0+dur+.05); o2.stop(t0+dur+.05); lfo.stop(t0+dur+.05);
+    return dur+.1;
+  }
+  function soundEleTrumpet(c,t0){
+    var dur=.9;
+    var o=c.createOscillator(), g=c.createGain();
+    var bp=c.createBiquadFilter(); bp.type="bandpass"; bp.frequency.value=520; bp.Q.value=.8;
+    o.type="sawtooth";
+    o.frequency.setValueAtTime(140,t0);
+    o.frequency.exponentialRampToValueAtTime(520,t0+.22);
+    o.frequency.exponentialRampToValueAtTime(340,t0+.42);
+    o.frequency.exponentialRampToValueAtTime(600,t0+.62);
+    o.frequency.exponentialRampToValueAtTime(180,t0+dur);
+    var vibrato=c.createOscillator(), vGain=c.createGain();
+    vibrato.frequency.value=22; vGain.gain.value=18;
+    vibrato.connect(vGain); vGain.connect(o.frequency);
+    g.gain.setValueAtTime(0,t0);
+    g.gain.linearRampToValueAtTime(.34,t0+.06);
+    g.gain.linearRampToValueAtTime(.26,t0+.6);
+    g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+    o.connect(bp); bp.connect(g); g.connect(c.destination);
+    o.start(t0); vibrato.start(t0);
+    o.stop(t0+dur+.05); vibrato.stop(t0+dur+.05);
+    return dur+.1;
+  }
+  function soundRabbitHop(c,t0){
+    var t=t0;
+    for(var i=0;i<4;i++){
+      var dur=.09;
+      var o=c.createOscillator(), g=c.createGain();
+      o.type="sine"; o.frequency.setValueAtTime(110,t); o.frequency.exponentialRampToValueAtTime(60,t+dur);
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(.3,t+.012);
+      g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+      o.connect(g); g.connect(c.destination);
+      o.start(t); o.stop(t+dur+.02);
+      t += 0.16 - i*0.012;
+    }
+    return t-t0+.15;
+  }
+
+  /* ---- real recorded sounds, loaded from the assets folder ---- */
+  var REAL_URLS = {
+    puja: "assets/pooja-bell.mp3",
+    ele: "assets/elephant.mp3"
+  };
+  var realBuffers = {}, realLoading = {};
+  function loadReal(c, key){
+    if(!REAL_URLS[key] || realBuffers[key] || realLoading[key]) return;
+    realLoading[key] = true;
+    fetch(REAL_URLS[key])
+      .then(function(r){ return r.arrayBuffer(); })
+      .then(function(ab){ return c.decodeAudioData(ab); })
+      .then(function(b){ realBuffers[key] = b; realLoading[key] = false; })
+      .catch(function(){ realLoading[key] = false; });
+  }
+  function loadAllReal(c){ for(var k in REAL_URLS) loadReal(c,k); }
+  function playReal(c, t0, key, gainVal){
+    var buf = realBuffers[key]; if(!buf) return null;
+    var src = c.createBufferSource(); src.buffer = buf;
+    var g = c.createGain(); g.gain.value = gainVal==null?.9:gainVal;
+    src.connect(g); g.connect(c.destination);
+    src.start(t0);
+    return buf.duration;
+  }
+
+  function soundPujaBell(c,t0){
+    loadReal(c,"puja");
+    var dur = playReal(c,t0,"puja",.9);
+    if(dur!=null) return dur;
+    /* fallback tone while the recording loads the first time */
+    tone(c, t0, 1180, .9, "sine", .3);
+    tone(c, t0, 2360, .7, "sine", .12);
+    return .9;
+  }
+  function soundEleReal(c,t0){
+    loadReal(c,"ele");
+    var dur = playReal(c,t0,"ele",1);
+    if(dur!=null) return dur;
+    return soundEleTrumpet(c,t0);
+  }
+
+  var SOUNDS = { bells:soundBells, squeak:soundSqueak, xylo:soundXylo, shaker:soundShaker, rain:soundRain, music:soundMusic, woodjingle:soundWoodJingle, wood:soundWood, pujabell:soundPujaBell, duckQuack:soundDuckQuack, bearGrowl:soundBearGrowl, eleTrumpet:soundEleReal, rabbitHop:soundRabbitHop };
+
+  function animateCard(btn, dur){
+    btn.classList.add("playing");
+    var barEl = btn.querySelector(".ring b");
+    var start = performance.now(), ms = dur*1000;
+    barEl.style.width = "0%";
+    (function step(){
+      var p = Math.min(1, (performance.now()-start)/ms);
+      barEl.style.width = (p*100)+"%";
+      if(p<1) requestAnimationFrame(step);
+      else { btn.classList.remove("playing"); setTimeout(function(){barEl.style.width="0%";},120); }
+    })();
+    if(navigator.vibrate) try{ navigator.vibrate(10); }catch(e){}
+  }
+
+  function playToy(id, btn){
+    var t = TOYS.filter(function(x){return x.id===id})[0];
+    var c = audio();
+    var t0 = c.currentTime + 0.02;
+    var dur = SOUNDS[t.sound](c, t0);
+    animateCard(btn, dur);
+  }
+
+  /* ---------------- your own added sounds (saved on this device) ---------------- */
+  var DB_NAME = "babyRattleDB", STORE = "clips";
+  function openDB(){
+    return new Promise(function(resolve,reject){
+      try{
+        var req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = function(){ req.result.createObjectStore(STORE); };
+        req.onsuccess = function(){ resolve(req.result); };
+        req.onerror = function(){ reject(req.error); };
+      }catch(e){ reject(e); }
+    });
+  }
+  function idbPut(id, blob){
+    return openDB().then(function(db){
+      return new Promise(function(resolve,reject){
+        try{
+          var tx = db.transaction(STORE,"readwrite");
+          tx.objectStore(STORE).put(blob, id);
+          tx.oncomplete = function(){ resolve(); };
+          tx.onerror = function(){ reject(tx.error); };
+        }catch(e){ reject(e); }
+      });
+    });
+  }
+  function idbGet(id){
+    return openDB().then(function(db){
+      return new Promise(function(resolve,reject){
+        try{
+          var tx = db.transaction(STORE,"readonly");
+          var req = tx.objectStore(STORE).get(id);
+          req.onsuccess = function(){ resolve(req.result); };
+          req.onerror = function(){ reject(req.error); };
+        }catch(e){ reject(e); }
+      });
+    });
+  }
+  function idbDelete(id){
+    return openDB().then(function(db){
+      return new Promise(function(resolve,reject){
+        try{
+          var tx = db.transaction(STORE,"readwrite");
+          tx.objectStore(STORE).delete(id);
+          tx.oncomplete = function(){ resolve(); };
+          tx.onerror = function(){ reject(tx.error); };
+        }catch(e){ reject(e); }
+      });
+    });
+  }
+
+  function loadCustomToys(){
+    try{ return JSON.parse(localStorage.getItem("customToys") || "[]"); }
+    catch(e){ return []; }
+  }
+  function saveCustomToys(arr){
+    try{ localStorage.setItem("customToys", JSON.stringify(arr)); }catch(e){}
+  }
+  var customToys = loadCustomToys();
+  var customBuffers = {};
+  var EMOJI_BG = ["#ffd9ec","#d9f0ff","#fff1c2","#e3ffe0","#ffe0d0","#e6dcff"];
+
+  function customMedia(t){
+    var idx = Math.abs(hashStr(t.id)) % EMOJI_BG.length;
+    return '<span class="emoji" style="--emoji-bg:'+EMOJI_BG[idx]+'">'+t.emoji+'</span>';
+  }
+  function hashStr(s){ var h=0; for(var i=0;i<s.length;i++){ h=((h<<5)-h+s.charCodeAt(i))|0; } return h; }
+
+  function playCustom(id, btn){
+    var meta = customToys.filter(function(x){return x.id===id;})[0];
+    if(!meta) return;
+    var c = audio();
+    function withBuffer(buf){
+      var t0 = c.currentTime + 0.02;
+      var src = c.createBufferSource(); src.buffer = buf;
+      var g = c.createGain(); g.gain.value = .9;
+      src.connect(g); g.connect(c.destination);
+      src.start(t0);
+      animateCard(btn, buf.duration);
+    }
+    if(customBuffers[id]){ withBuffer(customBuffers[id]); return; }
+    idbGet(id).then(function(blob){
+      if(!blob) throw new Error("missing");
+      return blob.arrayBuffer();
+    }).then(function(ab){
+      return c.decodeAudioData(ab);
+    }).then(function(buf){
+      customBuffers[id] = buf;
+      withBuffer(buf);
+    }).catch(function(){
+      addStatus.textContent = "Couldn't play \""+meta.name+"\". Try adding it again.";
+    });
+  }
+
+  function renderCustomCard(t){
+    var btn = makeCard(t.name, customMedia(t), function(b){ playCustom(t.id, b); }, true, function(){
+      removeCustomToy(t.id);
+    });
+    btn.dataset.custom = "1";
+    btn.dataset.customId = t.id;
+    (t.cat==="animal" ? gridAnimal : gridRattle).appendChild(btn);
+  }
+  function renderCustomListRow(t){
+    var row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = '<span class="emo">'+t.emoji+'</span>' +
+      '<span class="meta"><b>'+t.name+'</b> \u2014 '+(t.cat==="animal"?"Animals":"Rattles")+'</span>';
+    var del = document.createElement("span");
+    del.className = "del"; del.setAttribute("role","button"); del.setAttribute("aria-label","Remove "+t.name);
+    del.textContent = "\u00d7";
+    del.addEventListener("click", function(){ removeCustomToy(t.id); });
+    row.appendChild(del);
+    row.dataset.id = t.id;
+    customList.appendChild(row);
+  }
+  function renderAllCustom(){
+    customList.innerHTML = "";
+    customToys.forEach(function(t){ renderCustomCard(t); renderCustomListRow(t); });
+  }
+
+  function removeCustomToy(id){
+    customToys = customToys.filter(function(x){ return x.id!==id; });
+    saveCustomToys(customToys);
+    delete customBuffers[id];
+    idbDelete(id).catch(function(){});
+    var row = customList.querySelector('.row[data-id="'+id+'"]');
+    if(row) row.remove();
+    rebuildCustomGridEntries();
+  }
+  function rebuildCustomGridEntries(){
+    Array.prototype.slice.call(gridRattle.querySelectorAll(".rattle[data-custom='1']")).forEach(function(el){el.remove();});
+    Array.prototype.slice.call(gridAnimal.querySelectorAll(".rattle[data-custom='1']")).forEach(function(el){el.remove();});
+    customToys.forEach(function(t){ renderCustomCard(t); });
+  }
+
+  var newName = document.getElementById("newName"), newEmoji = document.getElementById("newEmoji"),
+      newCat = document.getElementById("newCat"), newFile = document.getElementById("newFile"),
+      addBtn = document.getElementById("addBtn"), addStatus = document.getElementById("addStatus"),
+      customList = document.getElementById("customList"),
+      restoreBtn = document.getElementById("restoreBtn");
+
+  function updateRestoreBtn(){
+    restoreBtn.hidden = hiddenBuiltins.length === 0;
+  }
+  restoreBtn.addEventListener("click", function(){
+    hiddenBuiltins = [];
+    saveHidden(hiddenBuiltins);
+    location.reload();
+  });
+  updateRestoreBtn();
+
+  function withTimeout(promise, ms){
+    return new Promise(function(resolve,reject){
+      var done = false;
+      var t = setTimeout(function(){ if(!done){ done=true; reject(new Error("timeout")); } }, ms);
+      promise.then(function(v){ if(!done){ done=true; clearTimeout(t); resolve(v); } },
+                   function(e){ if(!done){ done=true; clearTimeout(t); reject(e); } });
+    });
+  }
+
+  addBtn.addEventListener("click", function(){
+    var name = newName.value.trim();
+    var emoji = (newEmoji.value.trim() || "\ud83d\udd0a");
+    var cat = newCat.value;
+    var file = newFile.files && newFile.files[0];
+    if(!name){ addStatus.className="addStatus warn"; addStatus.textContent = "Give the sound a name first."; newName.focus(); return; }
+    if(!file){ addStatus.className="addStatus warn"; addStatus.textContent = "Choose an audio file to upload."; return; }
+    addStatus.className="addStatus"; addStatus.textContent = "Adding \""+name+"\"\u2026";
+    addBtn.disabled = true;
+    var id = "c_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
+    var c = audio();
+    file.arrayBuffer().then(function(ab){
+      return c.decodeAudioData(ab.slice(0));
+    }).then(function(buf){
+      customBuffers[id] = buf;
+      return withTimeout(idbPut(id, file), 4000);
+    }).then(function(){
+      var t = { id:id, name:name, emoji:emoji, cat:cat };
+      customToys.push(t);
+      saveCustomToys(customToys);
+      renderCustomCard(t);
+      renderCustomListRow(t);
+      addStatus.className="addStatus ok"; addStatus.textContent = "Added \""+name+"\". Find it in the "+(cat==="animal"?"Animals":"Rattles")+" tab.";
+      newName.value = ""; newEmoji.value = ""; newFile.value = "";
+    }).catch(function(err){
+      if(err && err.message==="timeout"){
+        addStatus.className="addStatus warn"; addStatus.textContent = "Saving isn't working in this in-chat preview. Open the published page link in your browser and try there \u2014 saved sounds work fully on the real page.";
+      } else {
+        addStatus.className="addStatus warn"; addStatus.textContent = "Couldn't read that file. Try a different audio file.";
+      }
+    }).then(function(){
+      addBtn.disabled = false;
+    });
+  });
+
+  renderAllCustom();
+
+  document.addEventListener("pointerdown", function(){ loadAllReal(audio()); }, {once:true});
+})();
+</script>
+</body>
+</html>
