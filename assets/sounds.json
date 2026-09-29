@@ -5,5 +5,12 @@
     "emoji": "🐘",
     "cat": "animal",
     "file": "assets/sounds/elephant.mp3"
+  },
+  {
+    "id": "elephant-2-0yj5",
+    "name": "Elephant 2",
+    "emoji": "🐘",
+    "cat": "animal",
+    "file": "assets/sounds/elephant-2.mp3"
   }
 ]
