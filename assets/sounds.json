@@ -1,0 +1,9 @@
+[
+  {
+    "id": "elephant-31g9",
+    "name": "Elephant",
+    "cat": "animal",
+    "image": "assets/images/elephant.jpg",
+    "file": "assets/sounds/elephant.mp3"
+  }
+]
