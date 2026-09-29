@@ -5,5 +5,12 @@
     "cat": "animal",
     "image": "assets/images/elephant.jpg",
     "file": "assets/sounds/elephant.mp3"
+  },
+  {
+    "id": "lion-mb0h",
+    "name": "Lion",
+    "cat": "animal",
+    "image": "assets/images/lion.jpg",
+    "file": "assets/sounds/lion.mp3"
   }
 ]
