@@ -5,5 +5,12 @@
     "emoji": "🐘",
     "cat": "animal",
     "file": "assets/sounds/elephant-2.mp3"
+  },
+  {
+    "id": "elephant-kbkp",
+    "name": "Elephant",
+    "cat": "animal",
+    "image": "assets/images/elephant.jpg",
+    "file": "assets/sounds/elephant.mp3"
   }
 ]
