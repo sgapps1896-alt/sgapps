@@ -19,5 +19,12 @@
     "cat": "animal",
     "image": "assets/images/tiger.jpg",
     "file": "assets/sounds/tiger.mp3"
+  },
+  {
+    "id": "pooja-bell-fdie",
+    "name": "Pooja Bell",
+    "cat": "rattle",
+    "image": "assets/images/pooja-bell.jpg",
+    "file": "assets/sounds/pooja-bell.mp3"
   }
 ]
