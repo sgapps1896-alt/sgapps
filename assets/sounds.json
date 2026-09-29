@@ -12,5 +12,12 @@
     "cat": "animal",
     "image": "assets/images/lion.jpg",
     "file": "assets/sounds/lion.mp3"
+  },
+  {
+    "id": "tiger-coxz",
+    "name": "Tiger",
+    "cat": "animal",
+    "image": "assets/images/tiger.jpg",
+    "file": "assets/sounds/tiger.mp3"
   }
 ]
